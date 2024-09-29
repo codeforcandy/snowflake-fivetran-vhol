@@ -1,0 +1,62 @@
+type: "orchestration"
+version: "1.0"
+pipeline:
+  components:
+    Start:
+      type: "start"
+      transitions:
+        unconditional:
+        - "OpenAI Prompt"
+      skipped: false
+      parameters:
+        componentName: "Start"
+    OpenAI Prompt:
+      type: "openai-ai-prompt"
+      skipped: false
+      parameters:
+        componentName: "OpenAI Prompt"
+        openAI:
+          model:
+          apiKey:
+          temperature: "1"
+          topP: "1"
+          "n": "1"
+          maxTokens:
+        source:
+          snowflake:
+            database: "[Environment Default]"
+            schema: "[Environment Default]"
+            table:
+            keyColumn:
+            limit: "1000"
+        promptContext:
+          userContext:
+          inputs:
+          outputFormat: "TEXT"
+        destination:
+          snowflake:
+            database: "[Environment Default]"
+            schema: "[Environment Default]"
+            table:
+            createTableOptions: "Fail if Table Exists"
+        ragConfig:
+          isRagEnabled: "No"
+          pinecone:
+            pineconeApiKey:
+            pineconeIndex:
+            pineconeNamespace:
+            topK: "3"
+          lookupSource:
+            dataLookupStrategy: "tableFromMetadata"
+design:
+  components:
+    Start:
+      position:
+        x: 0
+        "y": 0
+      tempMetlId: 1
+    OpenAI Prompt:
+      position:
+        x: 120
+        "y": 0
+      tempMetlId: 2
