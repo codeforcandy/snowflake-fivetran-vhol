@@ -1,0 +1,59 @@
+type: "orchestration"
+version: "1.0"
+pipeline:
+  components:
+    Start:
+      type: "start"
+      transitions:
+        unconditional:
+        - "Amazon Bedrock Prompt"
+      skipped: false
+      parameters:
+        componentName: "Start"
+    Amazon Bedrock Prompt:
+      type: "aws-ai-prompt"
+      skipped: false
+      parameters:
+        componentName: "Amazon Bedrock Prompt"
+        aws:
+          region:
+          modelCategory:
+          guardrailId:
+        source:
+          snowflake:
+            database: "[Environment Default]"
+            schema: "[Environment Default]"
+            table:
+            keyColumn:
+            limit: "1000"
+        promptContext:
+          userContext:
+          inputs:
+          outputFormat: "TEXT"
+        destination:
+          snowflake:
+            database: "[Environment Default]"
+            schema: "[Environment Default]"
+            table:
+            createTableOptions: "Fail if Table Exists"
+        ragConfig:
+          isRagEnabled: "No"
+          pinecone:
+            pineconeApiKey:
+            pineconeIndex:
+            pineconeNamespace:
+            topK: "3"
+          lookupSource:
+            dataLookupStrategy: "tableFromMetadata"
+design:
+  components:
+    Start:
+      position:
+        x: 0
+        "y": 0
+      tempMetlId: 1
+    Amazon Bedrock Prompt:
+      position:
+        x: 120
+        "y": 0
+      tempMetlId: 2
