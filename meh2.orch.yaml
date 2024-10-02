@@ -12,6 +12,9 @@ pipeline:
         componentName: "Start"
     Amazon Bedrock Prompt:
       type: "aws-ai-prompt"
+      transitions:
+        success:
+        - "Alter Table"
       skipped: false
       parameters:
         componentName: "Amazon Bedrock Prompt"
@@ -45,6 +48,15 @@ pipeline:
             topK: "3"
           lookupSource:
             dataLookupStrategy: "tableFromMetadata"
+    Alter Table:
+      type: "alter-table"
+      skipped: false
+      parameters:
+        componentName: "Alter Table"
+        targetTable:
+        schema: "[Environment Default]"
+        database: "[Environment Default]"
+        searchOptimizationService: "Off"
 design:
   components:
     Start:
@@ -57,3 +69,8 @@ design:
         x: 120
         "y": 0
       tempMetlId: 2
+    Alter Table:
+      position:
+        x: 240
+        "y": 0
+      tempMetlId: 3
